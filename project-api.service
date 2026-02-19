@@ -7,20 +7,20 @@ Wants=postgresql.service
 Type=simple
 User=projectapp
 Group=projectapp
-WorkingDirectory=/home/projectapp/project/server
-EnvironmentFile=/home/projectapp/project/server/.env
+WorkingDirectory=/var/www/project-mgmt/server
+EnvironmentFile=/var/www/project-mgmt/server/.env
 ExecStart=/usr/bin/node index.js
 Restart=on-failure
 RestartSec=10
-StandardOutput=append:/home/projectapp/project/server/logs/app.log
-StandardError=append:/home/projectapp/project/server/logs/error.log
+StandardOutput=append:/var/www/project-mgmt/server/logs/app.log
+StandardError=append:/var/www/project-mgmt/server/logs/error.log
 
 # Security
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/home/projectapp/project/server/logs
+ReadWritePaths=/var/www/project-mgmt/server/logs
 
 [Install]
 WantedBy=multi-user.target

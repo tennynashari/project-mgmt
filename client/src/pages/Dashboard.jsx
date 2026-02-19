@@ -22,9 +22,10 @@ export default function Dashboard() {
                      statusDistribution.review + statusDistribution.done;
 
   return (
-    <Layout>
+    <Layout title="Dashboard">
       <div className="p-4 md:p-8">
-        <h2 className="mb-6 text-2xl font-semibold text-slate-900">Dashboard</h2>
+        {/* Mobile Title */}
+        <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:hidden">Dashboard</h2>
         
         {/* Main Stats */}
         <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

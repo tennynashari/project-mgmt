@@ -28,9 +28,9 @@
 - [ ] Test koneksi database berhasil
 
 ### Application Upload
-- [ ] Project folder uploaded ke `/home/[user]/project`
-- [ ] Ownership correct: `chown -R [user]:[user] ~/project`
-- [ ] Permissions correct: `chmod -R 755 ~/project`
+- [ ] Project folder uploaded ke `/var/www/project-mgmt`
+- [ ] Ownership correct: `chown -R [user]:[user] /var/www/project-mgmt`
+- [ ] Permissions correct: `chmod -R 755 /var/www/project-mgmt`
 
 ## Configuration
 

@@ -53,9 +53,9 @@ export default function Activities() {
   };
 
   return (
-    <Layout>
+    <Layout title="Activity Log">
       <div className="p-4 md:p-8">
-        <h2 className="mb-6 text-2xl font-semibold text-slate-900">Activity Log</h2>
+        <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:hidden">Activity Log</h2>
 
         {loading ? (
           <div className="flex items-center justify-center py-12">

@@ -31,29 +31,50 @@ CREATE DATABASE project_management;
 CREATE USER projectapp WITH ENCRYPTED PASSWORD 'password_anda_yang_kuat';
 GRANT ALL PRIVILEGES ON DATABASE project_management TO projectapp;
 
-# Untuk PostgreSQL 15+, perlu grant tambahan:
-\c project_management
+# Keluar dan connect ke database yang baru dibuat
+\q
+```
+
+**Untuk PostgreSQL 15+, set permission schema public:**
+
+```bash
+# Login sebagai postgres dan connect ke database
+sudo -u postgres psql -d project_management
+
+# Di dalam PostgreSQL console:
 GRANT ALL ON SCHEMA public TO projectapp;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO projectapp;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO projectapp;
+GRANT CREATE ON SCHEMA public TO projectapp;
+ALTER SCHEMA public OWNER TO projectapp;
+
+# Grant default privileges untuk tabel dan sequence yang akan dibuat
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO projectapp;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO projectapp;
 
 # Keluar dari PostgreSQL
 \q
 ```
 
+**Verifikasi permission:**
+```bash
+# Test koneksi sebagai user projectapp
+psql -U projectapp -d project_management -h localhost -c "\dn+"
+# Seharusnya berhasil tanpa error
+```
+
 ## 3. Upload & Setup Aplikasi
 
 ```bash
-# Sebagai user projectapp
-cd ~
+# Buat direktori untuk aplikasi
+sudo mkdir -p /var/www/project-mgmt
+sudo chown -R projectapp:projectapp /var/www/project-mgmt
 
 # Upload project ke server (gunakan salah satu metode):
-# - SCP: scp -r project user@server:~/
-# - Git: git clone <repository-url>
-# - FTP/SFTP
+# - SCP: scp -r project/* user@server:/var/www/project-mgmt/
+# - Git: cd /var/www/project-mgmt && git clone <repository-url> .
+# - FTP/SFTP: Upload ke /var/www/project-mgmt
 
 # Masuk ke direktori project
-cd project
+cd /var/www/project-mgmt
 
 # Install dependencies untuk server
 cd server
@@ -71,7 +92,7 @@ npm run build
 
 ```bash
 # Buat file .env di direktori server
-cd ~/project/server
+cd /var/www/project-mgmt/server
 nano .env
 ```
 
@@ -80,8 +101,8 @@ Isi file `.env`:
 # Database
 DATABASE_URL="postgresql://projectapp:password_anda_yang_kuat@localhost:5432/project_management?schema=public"
 
-# JWT Secret (generate random string yang kuat)
-JWT_SECRET="your_super_secret_jwt_key_here_minimum_32_chars"
+# JWT Secret - WAJIB DIGANTI dengan hasil generate di bawah!
+JWT_SECRET="GANTI_DENGAN_HASIL_GENERATE_DI_BAWAH"
 
 # Server Config
 PORT=4000
@@ -91,16 +112,27 @@ NODE_ENV=production
 FRONTEND_URL=https://yourdomain.com
 ```
 
-**Generate JWT Secret:**
+**⚠️ PENTING: Generate JWT Secret yang Aman**
+
+Jalankan command ini untuk generate JWT_SECRET:
 ```bash
-# Generate random secret
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Output akan seperti ini (contoh):
+```
+a7f3b9c2e8d4f1a6c5b8d9e2f7a3c6b1d4e7f9a2c5b8d1e4f7a9c2e5b8d1f4
+```
+
+Copy hasil tersebut dan paste ke `JWT_SECRET` di file `.env`:
+```env
+JWT_SECRET="a7f3b9c2e8d4f1a6c5b8d9e2f7a3c6b1d4e7f9a2c5b8d1e4f7a9c2e5b8d1f4"
 ```
 
 ## 5. Setup Database Schema dengan Prisma
 
 ```bash
-cd ~/project/server
+cd /var/www/project-mgmt/server
 
 # Generate Prisma Client
 npx prisma generate
@@ -119,7 +151,7 @@ node prisma/seed.js
 sudo npm install -g pm2
 
 # Start aplikasi dengan PM2
-cd ~/project/server
+cd /var/www/project-mgmt/server
 pm2 start index.js --name "project-api"
 
 # Setup PM2 untuk auto-start saat reboot
@@ -143,7 +175,7 @@ Jika tidak ingin menggunakan PM2, bisa menggunakan systemd service:
 
 ```bash
 # Copy service file
-sudo cp ~/project/project-api.service /etc/systemd/system/
+sudo cp /var/www/project-mgmt/project-api.service /etc/systemd/system/
 
 # Edit jika perlu (sesuaikan user dan path)
 sudo nano /etc/systemd/system/project-api.service
@@ -180,7 +212,7 @@ server {
     server_name yourdomain.com www.yourdomain.com;  # Ganti dengan domain Anda
     
     # Frontend - React App
-    root /home/projectapp/project/client/dist;
+    root /var/www/project-mgmt/client/dist;
     index index.html;
 
     # Gzip compression
@@ -231,7 +263,7 @@ sudo systemctl reload nginx
 Sebelum build frontend, pastikan API URL sudah benar:
 
 ```bash
-nano ~/project/client/src/api.js
+nano /var/www/project-mgmt/client/src/api.js
 ```
 
 Update base URL:
@@ -241,7 +273,7 @@ const API_URL = '/api';  // Karena Nginx proxy ke /api/
 
 Lalu rebuild:
 ```bash
-cd ~/project/client
+cd /var/www/project-mgmt/client
 npm run build
 ```
 
@@ -281,17 +313,17 @@ sudo ufw status
 
 ```bash
 # Set ownership
-sudo chown -R projectapp:projectapp ~/project
+sudo chown -R projectapp:projectapp /var/www/project-mgmt
 
 # Set permissions untuk direktori
-find ~/project -type d -exec chmod 755 {} \;
+find /var/www/project-mgmt -type d -exec chmod 755 {} \;
 
 # Set permissions untuk file
-find ~/project -type f -exec chmod 644 {} \;
+find /var/www/project-mgmt -type f -exec chmod 644 {} \;
 
 # Set execute permission untuk node_modules binaries
-chmod -R 755 ~/project/server/node_modules/.bin
-chmod -R 755 ~/project/client/node_modules/.bin
+chmod -R 755 /var/www/project-mgmt/server/node_modules/.bin
+chmod -R 755 /var/www/project-mgmt/client/node_modules/.bin
 ```
 
 ## 12. Testing
@@ -313,24 +345,129 @@ sudo tail -f /var/log/nginx/error.log
 
 ## Maintenance & Updates
 
-### Update Aplikasi:
+### Update Aplikasi (Production):
+
+**Cara 1: Manual Update (Recommended untuk perubahan kecil)**
 ```bash
-cd ~/project
+# 1. Login ke server sebagai user projectapp
+ssh projectapp@your-server
 
-# Pull changes (jika pakai Git)
-git pull
+# 2. Masuk ke direktori project
+cd /var/www/project-mgmt
 
-# Update dependencies jika ada perubahan
+# 3. Pull perubahan terbaru (jika pakai Git)
+git pull origin main  # atau branch yang sesuai
+
+# 4. Update backend dependencies (jika ada perubahan di package.json)
 cd server
 npm install --production
 
-cd ../client
-npm install
+# 5. Update database schema (jika ada perubahan di Prisma)
+npx prisma generate
+npx prisma migrate deploy
 
-# Rebuild frontend
+# 6. Restart backend
+pm2 restart project-api
+
+# 7. Update dan rebuild frontend
+cd ../client
+npm install  # jika ada perubahan dependencies
 npm run build
 
-# Restart backend
+# 8. Fix permissions jika perlu
+sudo chown -R projectapp:projectapp /var/www/project-mgmt/client/dist
+
+# 9. Reload Nginx (jika ada perubahan konfigurasi)
+sudo systemctl reload nginx
+
+# 10. Verify
+pm2 logs project-api --lines 20
+curl http://localhost:4000/
+```
+
+**Cara 2: Update dari Local (Upload perubahan dari development)**
+```bash
+# Di komputer local (development)
+# 1. Build production di local
+cd client
+npm run build
+
+# 2. Upload file yang berubah ke server via SCP/SFTP
+# Upload ke /var/www/project-mgmt/
+
+# Di server
+# 3. Fix permissions
+sudo chown -R projectapp:projectapp /var/www/project-mgmt
+
+# 4. Restart services
+cd /var/www/project-mgmt/server
+pm2 restart project-api
+```
+
+**Cara 3: Automated Update Script (Advanced)**
+
+Buat file `update.sh`:
+```bash
+#!/bin/bash
+# File: /var/www/project-mgmt/update.sh
+
+set -e  # Exit on error
+
+echo "🔄 Starting application update..."
+
+# Navigate to project directory
+cd /var/www/project-mgmt
+
+# Pull latest changes
+echo "📥 Pulling latest code..."
+git pull origin main
+
+# Backend updates
+echo "🔧 Updating backend..."
+cd server
+npm install --production
+npx prisma generate
+npx prisma migrate deploy
+
+# Frontend updates
+echo "🎨 Rebuilding frontend..."
+cd ../client
+npm install
+npm run build
+
+# Fix permissions
+echo "🔐 Fixing permissions..."
+sudo chown -R projectapp:projectapp /var/www/project-mgmt
+
+# Restart services
+echo "🔄 Restarting services..."
+pm2 restart project-api
+
+# Verify
+echo "✅ Checking status..."
+pm2 status
+
+echo "✅ Update completed successfully!"
+echo "📊 Check logs: pm2 logs project-api"
+```
+
+Cara pakai:
+```bash
+# Jadikan executable
+chmod +x /var/www/project-mgmt/update.sh
+
+# Jalankan update
+./update.sh
+```
+
+**Rollback jika terjadi error:**
+```bash
+# Rollback Git
+git log --oneline  # lihat commit history
+git reset --hard COMMIT_HASH  # rollback ke commit tertentu
+
+# Rebuild
+cd client && npm run build
 pm2 restart project-api
 ```
 
@@ -369,11 +506,11 @@ pm2 logs project-api
 ### Frontend blank/error 404:
 ```bash
 # Pastikan build berhasil
-cd ~/project/client
+cd /var/www/project-mgmt/client
 npm run build
 
 # Cek path di Nginx config sesuai dengan lokasi dist
-ls -la ~/project/client/dist/
+ls -la /var/www/project-mgmt/client/dist/
 ```
 
 ### Database connection error:
@@ -385,11 +522,54 @@ psql -U projectapp -d project_management -h localhost
 # Pastikan user dan password benar
 ```
 
+### Permission denied for schema public:
+```bash
+# Error ini terjadi karena permission PostgreSQL belum lengkap
+# Fix dengan memberikan permission yang benar:
+
+sudo -u postgres psql -d project_management <<EOF
+GRANT ALL ON SCHEMA public TO projectapp;
+GRANT CREATE ON SCHEMA public TO projectapp;
+ALTER SCHEMA public OWNER TO projectapp;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO projectapp;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO projectapp;
+EOF
+
+# Lalu coba migrate lagi
+cd /var/www/project-mgmt/server
+npx prisma migrate deploy
+```
+
+### Migration failed / Database schema issues:
+```bash
+# Reset database (HATI-HATI: Akan hapus semua data!)
+cd /var/www/project-mgmt/server
+
+# Drop dan recreate database
+sudo -u postgres psql <<EOF
+DROP DATABASE IF EXISTS project_management;
+CREATE DATABASE project_management;
+ALTER DATABASE project_management OWNER TO projectapp;
+EOF
+
+# Set permissions
+sudo -u postgres psql -d project_management <<EOF
+GRANT ALL ON SCHEMA public TO projectapp;
+GRANT CREATE ON SCHEMA public TO projectapp;
+ALTER SCHEMA public OWNER TO projectapp;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO projectapp;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO projectapp;
+EOF
+
+# Run migrations
+npx prisma migrate deploy
+```
+
 ### Permission denied:
 ```bash
 # Reset permissions
-sudo chown -R projectapp:projectapp ~/project
-chmod -R 755 ~/project
+sudo chown -R projectapp:projectapp /var/www/project-mgmt
+chmod -R 755 /var/www/project-mgmt
 ```
 
 ## Security Checklist
@@ -425,7 +605,7 @@ sudo systemctl status postgresql
 pg_dump project_management > backup.sql
 
 # Update dan restart aplikasi
-cd ~/project && git pull
+cd /var/www/project-mgmt && git pull
 cd client && npm run build
 pm2 restart project-api
 ```

@@ -139,12 +139,12 @@ export default function UserManagement() {
   }
 
   return (
-    <Layout>
+    <Layout title="User Management">
       <div className="p-4 md:p-8">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900">User Management</h2>
-            <p className="text-sm text-slate-500">Manage team members and roles</p>
+            <h2 className="text-2xl font-semibold text-slate-900 md:hidden">User Management</h2>
+            <p className="text-sm text-slate-500 md:hidden">Manage team members and roles</p>
           </div>
           <button
             onClick={() => {

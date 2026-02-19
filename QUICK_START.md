@@ -9,7 +9,13 @@ su - projectapp
 ```
 
 ### 2. Upload Project ke Server
-Upload folder project ke `/home/projectapp/project`
+Upload folder project ke `/var/www/project-mgmt`
+
+```bash
+# Buat direktori dan set ownership
+sudo mkdir -p /var/www/project-mgmt
+sudo chown -R projectapp:projectapp /var/www/project-mgmt
+```
 
 ### 3. Setup Database
 ```bash
@@ -28,7 +34,7 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO projectapp;
 
 ### 4. Setup Environment
 ```bash
-cd ~/project/server
+cd /var/www/project-mgmt/server
 cp .env.example .env
 nano .env
 ```
@@ -49,7 +55,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ### 5. Install & Build
 ```bash
-cd ~/project
+cd /var/www/project-mgmt
 
 # Install & setup server
 cd server
@@ -67,7 +73,7 @@ npm run build
 ### 6. Setup PM2
 ```bash
 sudo npm install -g pm2
-cd ~/project/server
+cd /var/www/project-mgmt/server
 pm2 start ecosystem.config.js
 pm2 startup
 # Jalankan command yang ditampilkan
@@ -81,7 +87,7 @@ sudo nano /etc/nginx/sites-available/project-app
 
 Copy isi dari file `nginx.conf` di project, lalu:
 - Ganti `yourdomain.com` dengan domain Anda
-- Pastikan path `/home/projectapp/project/client/dist` benar
+- Pastikan path `/var/www/project-mgmt/client/dist` benar
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/project-app /etc/nginx/sites-enabled/
@@ -118,14 +124,14 @@ pm2 restart project-api
 sudo systemctl reload nginx
 
 # Deploy update (gunakan script)
-cd ~/project
+cd /var/www/project-mgmt
 chmod +x deploy.sh
 ./deploy.sh
 
 # Backup database (setup cron)
 chmod +x backup.sh
 # Setup cron: crontab -e
-# Tambahkan: 0 2 * * * /home/projectapp/project/backup.sh
+# Tambahkan: 0 2 * * * /var/www/project-mgmt/backup.sh
 ```
 
 ## Troubleshooting Cepat
@@ -133,7 +139,7 @@ chmod +x backup.sh
 **Backend error**: `pm2 logs project-api`
 **Database error**: Cek DATABASE_URL di `.env`
 **Frontend 404**: Pastikan `npm run build` berhasil dan path Nginx benar
-**Permission denied**: `sudo chown -R projectapp:projectapp ~/project`
+**Permission denied**: `sudo chown -R projectapp:projectapp /var/www/project-mgmt`
 
 ---
 

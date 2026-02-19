@@ -97,10 +97,10 @@ export default function Projects() {
   };
 
   return (
-    <Layout>
+    <Layout title="Projects">
       <div className="p-4 md:p-8">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-slate-900">Projects</h2>
+          <h2 className="text-2xl font-semibold text-slate-900 md:hidden">Projects</h2>
           <button
             onClick={() => {
               setShowForm(true);

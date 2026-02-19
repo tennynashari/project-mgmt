@@ -40,11 +40,13 @@ Dokumentasi lengkap untuk deployment aplikasi Project Management di Ubuntu 24.04
 sudo adduser projectapp
 su - projectapp
 
-# 2. Upload project ke server
-# Upload ke: /home/projectapp/project
+# 2. Buat direktori dan upload project
+sudo mkdir -p /var/www/project-mgmt
+sudo chown -R projectapp:projectapp /var/www/project-mgmt
+# Upload project ke /var/www/project-mgmt
 
 # 3. Jalankan setup script
-cd ~/project
+cd /var/www/project-mgmt
 chmod +x setup.sh
 ./setup.sh
 
@@ -56,7 +58,8 @@ pm2 save
 
 # 5. Setup Nginx
 sudo cp ~/project/nginx.conf /etc/nginx/sites-available/project-app
-sudo nano /etc/nginx/sites-available/project-app  # Edit domain
+sudo nano /etc/nginx/sites-available/project-app  # Edit domain dan path
+sudo ln -s /etc/nginx/sites-available/project-app /etc/nginx/sites-enabled/
 sudo ln -s /etc/nginx/sites-available/project-app /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
@@ -75,7 +78,7 @@ sudo ufw enable
 
 ```bash
 # Cukup jalankan deploy script
-cd ~/project
+cd /var/www/project-mgmt
 ./deploy.sh
 ```
 
@@ -114,7 +117,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ### 2. nginx.conf
 ```nginx
 server_name yourdomain.com www.yourdomain.com;  # ← GANTI INI
-root /home/projectapp/project/client/dist;      # ← CEK PATH INI
+root /var/www/project-mgmt/client/dist;         # ← CEK PATH INI
 ```
 
 ### 3. server/ecosystem.config.js (jika pakai PM2)
@@ -126,8 +129,8 @@ Biasanya tidak perlu diedit, kecuali:
 ### 4. project-api.service (jika pakai systemd)
 ```ini
 User=projectapp              # ← GANTI sesuai user Anda
-WorkingDirectory=/home/projectapp/project/server  # ← CEK PATH INI
-EnvironmentFile=/home/projectapp/project/server/.env  # ← CEK PATH INI
+WorkingDirectory=/var/www/project-mgmt/server  # ← CEK PATH INI
+EnvironmentFile=/var/www/project-mgmt/server/.env  # ← CEK PATH INI
 ```
 
 ## 🛠️ Workflow Penggunaan File
@@ -215,7 +218,7 @@ sudo systemctl reload nginx
 
 # Setup auto backup (daily at 2 AM)
 crontab -e
-# Add: 0 2 * * * /home/projectapp/project/backup.sh
+# Add: 0 2 * * * /var/www/project-mgmt/backup.sh
 ```
 
 ### Deploy Updates
@@ -269,9 +272,9 @@ journalctl -u project-api -n 100
 
 ### Config Locations
 - **Nginx**: `/etc/nginx/sites-available/project-app`
-- **PM2**: `~/project/server/ecosystem.config.js`
+- **PM2**: `/var/www/project-mgmt/server/ecosystem.config.js`
 - **Systemd**: `/etc/systemd/system/project-api.service`
-- **Environment**: `~/project/server/.env`
+- **Environment**: `/var/www/project-mgmt/server/.env`
 
 ---
 
