@@ -28,15 +28,30 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-soft">
-        <h2 className="mb-6 text-center text-2xl font-semibold text-slate-900">
-          {isRegister ? "Register" : "Login"}
-        </h2>
-        {error && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</div>
-        )}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 px-4 py-8">
+      <div className="w-full max-w-md">
+        {/* Header - App Title */}
+        <div className="mb-8 text-center">
+          <div className="mb-4 flex items-center justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-lg">
+              <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+            </div>
+          </div>
+          <h1 className="mb-2 text-3xl font-bold text-slate-900">Project Management App</h1>
+          <p className="text-sm text-slate-600">Manage your projects efficiently</p>
+        </div>
+
+        {/* Login/Register Card */}
+        <div className="rounded-2xl bg-white p-8 shadow-xl">
+          <h2 className="mb-6 text-center text-xl font-semibold text-slate-900">
+            {isRegister ? "Create Account" : "Welcome Back"}
+          </h2>
+          {error && (
+            <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</div>
+          )}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {isRegister && (
             <input
               type="text"
@@ -65,9 +80,9 @@ export default function Login() {
           />
           <button
             type="submit"
-            className="rounded-lg bg-slate-900 py-3 text-sm font-medium text-white transition hover:bg-slate-700"
+            className="rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-semibold text-white shadow-md transition hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg"
           >
-            {isRegister ? "Register" : "Login"}
+            {isRegister ? "Create Account" : "Sign In"}
           </button>
         </form>
         <p className="mt-6 text-center text-sm text-slate-600">
@@ -75,10 +90,16 @@ export default function Login() {
           <button
             type="button"
             onClick={() => setIsRegister(!isRegister)}
-            className="font-medium text-blue-600 hover:underline"
+            className="font-semibold text-blue-600 transition hover:text-blue-700 hover:underline"
           >
-            {isRegister ? "Login" : "Register"}
+            {isRegister ? "Sign In" : "Create Account"}
           </button>
+        </p>
+        </div>
+
+        {/* Footer */}
+        <p className="mt-6 text-center text-xs text-slate-500">
+          © 2026 Project Management App. All rights reserved.
         </p>
       </div>
     </div>

@@ -84,8 +84,8 @@ npm install --production
 cd ../client
 npm install
 
-# Build client untuk production
-npm run build
+# CATATAN: Jangan build dulu! Build dilakukan di Section 6
+# setelah setup .env.production
 ```
 
 ## 4. Setup Environment Variables
@@ -144,7 +144,68 @@ npx prisma migrate deploy
 node prisma/seed.js
 ```
 
-## 6. Setup PM2 untuk Menjalankan Backend
+## 6. Setup Frontend untuk Production
+
+**PENTING: Lakukan ini SEBELUM build frontend!**
+
+File `.env.production` sudah tersedia di repository. Verifikasi isinya:
+
+```bash
+# Cek apakah file ada
+cd /var/www/project-mgmt/client
+cat .env.production
+```
+
+Harusnya berisi:
+```env
+VITE_API_URL=/api
+```
+
+**Jika file tidak ada, buat manual:**
+```bash
+cd /var/www/project-mgmt/client
+nano .env.production
+```
+
+Isi dengan:
+```env
+VITE_API_URL=/api
+```
+
+**Penjelasan:**
+- Frontend akan menggunakan `/api` sebagai base URL
+- Nginx akan proxy `/api/` ke `http://localhost:4000/`
+- Ini membuat frontend dan backend di domain yang sama (no CORS issues)
+
+**Verifikasi file `src/api.js` sudah benar:**
+```bash
+cat src/api.js
+```
+
+Harusnya ada kode seperti ini:
+```javascript
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+```
+
+**Sekarang build frontend untuk production:**
+```bash
+cd /var/www/project-mgmt/client
+npm run build
+```
+
+Build akan menghasilkan folder `dist/` yang berisi static files.
+
+**Verifikasi build berhasil:**
+```bash
+ls -lh dist/
+# Harusnya ada: index.html, assets/, dll
+
+# Pastikan tidak ada referensi localhost:4000 di build
+grep -r "localhost:4000" dist/
+# Harusnya kosong (tidak ada hasil)
+```
+
+## 7. Setup PM2 untuk Menjalankan Backend
 
 ```bash
 # Install PM2 globally (jika belum ada)
@@ -198,7 +259,7 @@ sudo systemctl status project-api
 # sudo journalctl -u project-api -f  - View logs
 ```
 
-## 7. Setup Nginx
+## 8. Setup Nginx
 
 ```bash
 # Buat konfigurasi Nginx
@@ -256,25 +317,6 @@ sudo nginx -t
 
 # Reload Nginx
 sudo systemctl reload nginx
-```
-
-## 8. Update Frontend API URL
-
-Sebelum build frontend, pastikan API URL sudah benar:
-
-```bash
-nano /var/www/project-mgmt/client/src/api.js
-```
-
-Update base URL:
-```javascript
-const API_URL = '/api';  // Karena Nginx proxy ke /api/
-```
-
-Lalu rebuild:
-```bash
-cd /var/www/project-mgmt/client
-npm run build
 ```
 
 ## 9. Setup SSL dengan Let's Encrypt (Opsional tapi Direkomendasikan)
