@@ -1,4 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+// Automatic detection: production build uses empty string, development uses localhost
+const API_URL = import.meta.env.MODE === 'production' 
+  ? '' 
+  : (import.meta.env.VITE_API_URL || "http://localhost:4000");
 
 export const getToken = () => localStorage.getItem("token");
 

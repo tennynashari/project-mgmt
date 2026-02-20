@@ -186,8 +186,14 @@ cat src/api.js
 
 Harusnya ada kode seperti ini:
 ```javascript
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+const API_URL = import.meta.env.VITE_API_URL !== undefined 
+  ? import.meta.env.VITE_API_URL 
+  : "http://localhost:4000";
 ```
+
+**PENTING:** 
+- Di production: `VITE_API_URL=` (kosong, tanpa nilai) → request ke `/api/` langsung
+- Di development: fallback ke `http://localhost:4000`
 
 **Sekarang build frontend untuk production:**
 ```bash
@@ -205,6 +211,10 @@ ls -lh dist/
 # Pastikan tidak ada referensi localhost:4000 di build
 grep -r "localhost:4000" dist/
 # Harusnya kosong (tidak ada hasil)
+
+# Verify API calls di JavaScript bundle
+grep -r "api.*auth" dist/assets/*.js | head -5
+# Harusnya request ke /api/auth, bukan localhost
 ```
 
 ## 7. Setup PM2 untuk Menjalankan Backend
