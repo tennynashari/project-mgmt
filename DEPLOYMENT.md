@@ -158,7 +158,8 @@ cat .env.production
 
 Harusnya berisi:
 ```env
-VITE_API_URL=/api
+# Kosongkan karena semua endpoint sudah include /api/ prefix
+VITE_API_URL=
 ```
 
 **Jika file tidak ada, buat manual:**
@@ -169,7 +170,8 @@ nano .env.production
 
 Isi dengan:
 ```env
-VITE_API_URL=/api
+# Kosongkan karena semua endpoint sudah include /api/ prefix
+VITE_API_URL=
 ```
 
 **Penjelasan:**
