@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout.jsx";
 import { apiFetch } from "../api.js";
+import * as XLSX from 'xlsx';
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
@@ -35,6 +36,53 @@ export default function Projects() {
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    try {
+      // Fetch all projects without pagination
+      const allData = await apiFetch(`/api/projects?limit=10000`);
+      const allProjects = allData.data || allData;
+
+      // Prepare data for Excel
+      const excelData = allProjects.map((project, index) => ({
+        'No': index + 1,
+        'Project Name': project.name,
+        'Description': project.description || '-',
+        'Status': project.status,
+        'Start Date': project.startDate ? new Date(project.startDate).toLocaleDateString('id-ID') : '-',
+        'End Date': project.endDate ? new Date(project.endDate).toLocaleDateString('id-ID') : '-',
+        'Owner': project.owner?.name || '-',
+        'Created': new Date(project.createdAt).toLocaleDateString('id-ID')
+      }));
+
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(excelData);
+
+      // Set column widths
+      ws['!cols'] = [
+        { wch: 5 },  // No
+        { wch: 30 }, // Project Name
+        { wch: 40 }, // Description
+        { wch: 12 }, // Status
+        { wch: 15 }, // Start Date
+        { wch: 15 }, // End Date
+        { wch: 20 }, // Owner
+        { wch: 15 }  // Created
+      ];
+
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, 'Projects');
+
+      // Generate filename with current date
+      const fileName = `Projects_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+      // Download file
+      XLSX.writeFile(wb, fileName);
+    } catch (err) {
+      alert('Failed to export: ' + err.message);
     }
   };
 
@@ -99,24 +147,35 @@ export default function Projects() {
   return (
     <Layout title="Projects">
       <div className="p-4 md:p-8">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-semibold text-slate-900 md:hidden">Projects</h2>
-          <button
-            onClick={() => {
-              setShowForm(true);
-              setEditingId(null);
-              setFormData({
-                name: "",
-                description: "",
-                status: "Planning",
-                startDate: "",
-                endDate: ""
-              });
-            }}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
-          >
-            + New Project
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleExportExcel}
+              className="flex items-center gap-2 rounded-lg border border-green-600 bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Export Excel
+            </button>
+            <button
+              onClick={() => {
+                setShowForm(true);
+                setEditingId(null);
+                setFormData({
+                  name: "",
+                  description: "",
+                  status: "Planning",
+                  startDate: "",
+                  endDate: ""
+                });
+              }}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+            >
+              + New Project
+            </button>
+          </div>
         </div>
 
         {showForm && (
