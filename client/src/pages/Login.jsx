@@ -97,6 +97,67 @@ export default function Login() {
         </p>
         </div>
 
+        {/* Demo Credentials - Only show on Login */}
+        {!isRegister && (
+          <div className="mt-6 rounded-xl bg-blue-50 border border-blue-200 p-6">
+            <div className="mb-3 flex items-center gap-2">
+              <svg className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="text-sm font-semibold text-blue-900">Demo Login Credentials</h3>
+            </div>
+            <div className="space-y-3 text-xs">
+              <div className="rounded-lg bg-white p-3 shadow-sm">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="inline-block rounded-full bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-700">Project Manager</span>
+                </div>
+                <div className="space-y-1 text-slate-600">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-slate-900">Email:</span>
+                    <code className="rounded bg-slate-100 px-2 py-0.5 text-blue-600">john@example.com</code>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-slate-900">Password:</span>
+                    <code className="rounded bg-slate-100 px-2 py-0.5 text-blue-600">password123</code>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="rounded-lg bg-white p-3 shadow-sm">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="inline-block rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">Team Member</span>
+                </div>
+                <div className="space-y-1 text-slate-600">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-slate-900">Email:</span>
+                    <code className="rounded bg-slate-100 px-2 py-0.5 text-blue-600">jane@example.com</code>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-slate-900">Password:</span>
+                    <code className="rounded bg-slate-100 px-2 py-0.5 text-blue-600">password123</code>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-lg bg-white p-3 shadow-sm">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="inline-block rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">Team Member</span>
+                </div>
+                <div className="space-y-1 text-slate-600">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-slate-900">Email:</span>
+                    <code className="rounded bg-slate-100 px-2 py-0.5 text-blue-600">bob@example.com</code>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-slate-900">Password:</span>
+                    <code className="rounded bg-slate-100 px-2 py-0.5 text-blue-600">password123</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
         <p className="mt-6 text-center text-xs text-slate-500">
           © 2026 Project Management App. All rights reserved.
