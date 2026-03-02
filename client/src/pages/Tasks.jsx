@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout.jsx";
 import { apiFetch } from "../api.js";
 import * as XLSX from 'xlsx';
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 export default function Tasks() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
@@ -96,7 +98,7 @@ export default function Tasks() {
         'Project': task.project?.name || '-',
         'Status': task.status,
         'Priority': task.priority,
-        'Assignee': task.assignee?.name || 'Unassigned',
+        'Assignee': task.assignee?.name || t("tasks.unassigned"),
         'Progress': task.progress + '%',
         'Start Date': task.startDate ? new Date(task.startDate).toLocaleDateString('id-ID') : '-',
         'Due Date': task.dueDate ? new Date(task.dueDate).toLocaleDateString('id-ID') : '-',
@@ -189,7 +191,7 @@ export default function Tasks() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Delete this task?")) return;
+    if (!confirm(t("tasks.deleteConfirm"))) return;
     try {
       await apiFetch(`/api/tasks/${id}`, { method: "DELETE" });
       loadTasks();
@@ -240,10 +242,10 @@ export default function Tasks() {
   };
 
   return (
-    <Layout title="Tasks">
+    <Layout title={t("tasks.title")}>
       <div className="p-4 md:p-8">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-2xl font-semibold text-slate-900 md:hidden">Tasks</h2>
+          <h2 className="text-2xl font-semibold text-slate-900 md:hidden">{t("tasks.title")}</h2>
           <div className="flex gap-2">
             <button
               onClick={handleExportExcel}
@@ -252,7 +254,7 @@ export default function Tasks() {
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              Export Excel
+              {t("common.export")}
             </button>
             {(!currentUser || currentUser.role === "PM" || currentUser.role === "Admin") && (
               <button
@@ -262,7 +264,7 @@ export default function Tasks() {
                 }}
                 className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
               >
-                + New Task
+                {t("tasks.newTask")}
               </button>
             )}
           </div>
@@ -275,18 +277,18 @@ export default function Tasks() {
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
-            <option value="all">All Status</option>
-            <option value="To Do">To Do</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Review">Review</option>
-            <option value="Done">Done</option>
+            <option value="all">{t("tasks.allStatus")}</option>
+            <option value="To Do">{t("tasks.statuses.todo")}</option>
+            <option value="In Progress">{t("tasks.statuses.inProgress")}</option>
+            <option value="Review">{t("tasks.statuses.review")}</option>
+            <option value="Done">{t("tasks.statuses.done")}</option>
           </select>
           <select
             className="rounded-lg border border-slate-200 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
             value={filterProject}
             onChange={(e) => setFilterProject(e.target.value)}
           >
-            <option value="all">All Projects</option>
+            <option value="all">{t("tasks.allProjects")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -299,7 +301,7 @@ export default function Tasks() {
         {showForm && (
           <div className="mb-6 rounded-xl bg-white p-6 shadow-soft">
             <h3 className="mb-4 text-lg font-semibold text-slate-900">
-              {editingId ? "Edit Task" : "Create Task"}
+              {editingId ? t("tasks.editTask") : t("tasks.createTask")}
             </h3>
             <form onSubmit={handleSave} className="flex flex-col gap-4">
               <select
@@ -308,7 +310,7 @@ export default function Tasks() {
                 onChange={(e) => setFormData({ ...formData, projectId: e.target.value })}
                 required
               >
-                <option value="">Select Project</option>
+                <option value="">{t("tasks.selectProject")}</option>
                 {projects.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -317,14 +319,14 @@ export default function Tasks() {
               </select>
               <input
                 type="text"
-                placeholder="Task Title"
+                placeholder={t("tasks.taskTitle")}
                 className="rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
               />
               <textarea
-                placeholder="Description"
+                placeholder={t("tasks.description")}
                 className="rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
                 rows="3"
                 value={formData.description}
@@ -336,19 +338,19 @@ export default function Tasks() {
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 >
-                  <option>To Do</option>
-                  <option>In Progress</option>
-                  <option>Review</option>
-                  <option>Done</option>
+                  <option>{t("tasks.statuses.todo")}</option>
+                  <option>{t("tasks.statuses.inProgress")}</option>
+                  <option>{t("tasks.statuses.review")}</option>
+                  <option>{t("tasks.statuses.done")}</option>
                 </select>
                 <select
                   className="rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                 >
-                  <option>Low</option>
-                  <option>Medium</option>
-                  <option>High</option>
+                  <option>{t("tasks.priorities.low")}</option>
+                  <option>{t("tasks.priorities.medium")}</option>
+                  <option>{t("tasks.priorities.high")}</option>
                 </select>
               </div>
               <select
@@ -356,7 +358,7 @@ export default function Tasks() {
                 value={formData.assigneeId}
                 onChange={(e) => setFormData({ ...formData, assigneeId: e.target.value })}
               >
-                <option value="">Unassigned</option>
+                <option value="">{t("tasks.unassigned")}</option>
                 {users.map((u) => (
                   <option key={u.id} value={u.id}>
                     {u.name} ({u.email})
@@ -365,7 +367,7 @@ export default function Tasks() {
               </select>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-1 block text-xs text-slate-600">Start Date</label>
+                  <label className="mb-1 block text-xs text-slate-600">{t("tasks.startDate")}</label>
                   <input
                     type="date"
                     className="w-full rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
@@ -374,7 +376,7 @@ export default function Tasks() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-slate-600">Due Date</label>
+                  <label className="mb-1 block text-xs text-slate-600">{t("tasks.dueDate")}</label>
                   <input
                     type="date"
                     className="w-full rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
@@ -384,7 +386,7 @@ export default function Tasks() {
                 </div>
               </div>
               <div>
-                <label className="mb-1 block text-xs text-slate-600">Progress: {formData.progress}%</label>
+                <label className="mb-1 block text-xs text-slate-600">{t("tasks.progress")}: {formData.progress}%</label>
                 <input
                   type="range"
                   min="0"
@@ -400,14 +402,14 @@ export default function Tasks() {
                   type="submit"
                   className="flex-1 rounded-lg bg-slate-900 py-3 text-sm font-medium text-white transition hover:bg-slate-700"
                 >
-                  {editingId ? "Update" : "Create"}
+                  {editingId ? t("common.save") : t("common.save")}
                 </button>
                 <button
                   type="button"
                   onClick={resetForm}
                   className="flex-1 rounded-lg border border-slate-200 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                 >
-                  Cancel
+                  {t("common.cancel")}
                 </button>
               </div>
             </form>
@@ -439,16 +441,16 @@ export default function Tasks() {
                     <div>📁 {task.project.name}</div>
                     {task.assignee && <div>👤 {task.assignee.name}</div>}
                     {task.startDate && (
-                      <div>🗓️ Start: {new Date(task.startDate).toLocaleDateString()}</div>
+                      <div>🗓️ {t("tasks.start")}: {new Date(task.startDate).toLocaleDateString()}</div>
                     )}
                     {task.dueDate && (
-                      <div>📅 Due: {new Date(task.dueDate).toLocaleDateString()}</div>
+                      <div>📅 {t("tasks.due")}: {new Date(task.dueDate).toLocaleDateString()}</div>
                     )}
                   </div>
                   {/* Progress Bar */}
                   <div className="mt-3">
                     <div className="mb-1 flex items-center justify-between text-xs text-slate-600">
-                      <span>Progress</span>
+                      <span>{t("tasks.progress")}</span>
                       <span>{task.progress}%</span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
@@ -466,13 +468,13 @@ export default function Tasks() {
                     onClick={() => handleEdit(task)}
                     className="flex-1 rounded-lg bg-slate-100 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-200"
                   >
-                    Edit
+                    {t("common.edit")}
                   </button>
                   <button
                     onClick={() => handleDelete(task.id)}
                     className="flex-1 rounded-lg bg-red-100 py-2 text-xs font-medium text-red-700 transition hover:bg-red-200"
                   >
-                    Delete
+                    {t("common.delete")}
                   </button>
                 </div>
               )}
@@ -482,6 +484,9 @@ export default function Tasks() {
 
         {filteredTasks.length === 0 && (
           <div className="rounded-xl bg-white p-12 text-center shadow-soft">
+            <p className="text-slate-500">{t("tasks.noTasks")}</p>
+          </div>
+        )}
 
         {/* Pagination */}
         {pagination.totalPages > 1 && (
@@ -491,21 +496,18 @@ export default function Tasks() {
               disabled={pagination.page === 1}
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Previous
+              {t("common.previous")}
             </button>
             <span className="px-4 py-2 text-sm text-slate-600">
-              Page {pagination.page} of {pagination.totalPages}
+              {t("common.page")} {pagination.page} {t("common.of")} {pagination.totalPages}
             </span>
             <button
               onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
               disabled={pagination.page === pagination.totalPages}
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Next
+              {t("common.next")}
             </button>
-          </div>
-        )}
-            <p className="text-slate-500">No tasks found</p>
           </div>
         )}
       </div>

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout.jsx";
 import { apiFetch } from "../api.js";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 export default function Activities() {
+  const { t } = useLanguage();
   const [activities, setActivities] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0, totalPages: 0 });
   const [loading, setLoading] = useState(true);
@@ -45,21 +47,21 @@ export default function Activities() {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return "just now";
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
+    if (diffMins < 1) return t("activities.justNow");
+    if (diffMins < 60) return `${diffMins}${t("activities.minutesAgo")}`;
+    if (diffHours < 24) return `${diffHours}${t("activities.hoursAgo")}`;
+    if (diffDays < 7) return `${diffDays}${t("activities.daysAgo")}`;
     return time.toLocaleDateString();
   };
 
   return (
-    <Layout title="Activity Log">
+    <Layout title={t("activities.title")}>
       <div className="p-4 md:p-8">
-        <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:hidden">Activity Log</h2>
+        <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:hidden">{t("activities.title")}</h2>
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <p className="text-slate-500">Loading activities...</p>
+            <p className="text-slate-500">{t("activities.loadingActivities")}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -82,7 +84,7 @@ export default function Activities() {
 
             {activities.length === 0 && !loading && (
               <div className="rounded-xl bg-white p-12 text-center shadow-soft">
-                <p className="text-slate-500">No activities yet</p>
+                <p className="text-slate-500">{t("activities.noActivities")}</p>
               </div>
             )}
           </div>
@@ -96,17 +98,17 @@ export default function Activities() {
               disabled={pagination.page === 1}
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Previous
+              {t("common.previous")}
             </button>
             <span className="px-4 py-2 text-sm text-slate-600">
-              Page {pagination.page} of {pagination.totalPages}
+              {t("common.page")} {pagination.page} {t("common.of")} {pagination.totalPages}
             </span>
             <button
               onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
               disabled={pagination.page === pagination.totalPages}
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Next
+              {t("common.next")}
             </button>
           </div>
         )}

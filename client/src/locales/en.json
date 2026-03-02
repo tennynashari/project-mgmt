@@ -74,5 +74,76 @@
       "pm": "Project Manager",
       "member": "Member"
     }
+  },
+  "projects": {
+    "title": "Projects",
+    "newProject": "New Project",
+    "createProject": "Create Project",
+    "editProject": "Edit Project",
+    "projectName": "Project Name",
+    "description": "Description",
+    "status": "Status",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "owner": "Owner",
+    "noProjects": "No projects found",
+    "deleteConfirm": "Delete this project? All related tasks and data will be removed.",
+    "exportFailed": "Failed to export",
+    "progress": "Progress",
+    "totalTasks": "Total Tasks",
+    "archive": "Archive",
+    "start": "Start",
+    "end": "End",
+    "statuses": {
+      "planning": "Planning",
+      "ongoing": "Ongoing",
+      "completed": "Completed",
+      "onHold": "On Hold",
+      "archived": "Archived"
+    }
+  },
+  "tasks": {
+    "title": "Tasks",
+    "newTask": "New Task",
+    "createTask": "Create Task",
+    "editTask": "Edit Task",
+    "taskTitle": "Task Title",
+    "project": "Project",
+    "description": "Description",
+    "status": "Status",
+    "priority": "Priority",
+    "assignee": "Assignee",
+    "startDate": "Start Date",
+    "dueDate": "Due Date",
+    "start": "Start",
+    "due": "Due",
+    "progress": "Progress",
+    "noTasks": "No tasks found",
+    "unassigned": "Unassigned",
+    "deleteConfirm": "Delete this task?",
+    "allStatus": "All Status",
+    "allProjects": "All Projects",
+    "selectProject": "Select Project",
+    "selectAssignee": "Select Assignee",
+    "statuses": {
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "review": "Review",
+      "done": "Done"
+    },
+    "priorities": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    }
+  },
+  "activities": {
+    "title": "Activity Log",
+    "loadingActivities": "Loading activities...",
+    "noActivities": "No activities yet",
+    "justNow": "just now",
+    "minutesAgo": "m ago",
+    "hoursAgo": "h ago",
+    "daysAgo": "d ago"
   }
 }

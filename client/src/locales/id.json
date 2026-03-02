@@ -74,5 +74,76 @@
       "pm": "Manajer Proyek",
       "member": "Anggota"
     }
+  },
+  "projects": {
+    "title": "Proyek",
+    "newProject": "Proyek Baru",
+    "createProject": "Buat Proyek",
+    "editProject": "Ubah Proyek",
+    "projectName": "Nama Proyek",
+    "description": "Deskripsi",
+    "status": "Status",
+    "startDate": "Tanggal Mulai",
+    "endDate": "Tanggal Selesai",
+    "owner": "Pemilik",
+    "noProjects": "Tidak ada proyek",
+    "deleteConfirm": "Hapus proyek ini? Semua tugas dan data terkait akan dihapus.",
+    "exportFailed": "Gagal mengekspor",
+    "progress": "Progres",
+    "totalTasks": "Total Tugas",
+    "archive": "Arsipkan",
+    "start": "Mulai",
+    "end": "Selesai",
+    "statuses": {
+      "planning": "Perencanaan",
+      "ongoing": "Sedang Berjalan",
+      "completed": "Selesai",
+      "onHold": "Ditunda",
+      "archived": "Diarsipkan"
+    }
+  },
+  "tasks": {
+    "title": "Tugas",
+    "newTask": "Tugas Baru",
+    "createTask": "Buat Tugas",
+    "editTask": "Ubah Tugas",
+    "taskTitle": "Judul Tugas",
+    "project": "Proyek",
+    "description": "Deskripsi",
+    "status": "Status",
+    "priority": "Prioritas",
+    "assignee": "Ditugaskan Kepada",
+    "startDate": "Tanggal Mulai",
+    "dueDate": "Tanggal Jatuh Tempo",
+    "start": "Mulai",
+    "due": "Jatuh Tempo",
+    "progress": "Progres",
+    "noTasks": "Tidak ada tugas",
+    "unassigned": "Belum Ditugaskan",
+    "deleteConfirm": "Hapus tugas ini?",
+    "allStatus": "Semua Status",
+    "allProjects": "Semua Proyek",
+    "selectProject": "Pilih Proyek",
+    "selectAssignee": "Pilih Pengguna",
+    "statuses": {
+      "todo": "Belum Mulai",
+      "inProgress": "Sedang Berjalan",
+      "review": "Ditinjau",
+      "done": "Selesai"
+    },
+    "priorities": {
+      "low": "Rendah",
+      "medium": "Sedang",
+      "high": "Tinggi"
+    }
+  },
+  "activities": {
+    "title": "Log Aktivitas",
+    "loadingActivities": "Memuat aktivitas...",
+    "noActivities": "Belum ada aktivitas",
+    "justNow": "baru saja",
+    "minutesAgo": "m lalu",
+    "hoursAgo": "j lalu",
+    "daysAgo": "h lalu"
   }
 }
