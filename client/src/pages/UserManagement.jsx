@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout.jsx";
 import { apiFetch } from "../api.js";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 export default function UserManagement() {
+  const { t } = useLanguage();
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -64,7 +66,7 @@ export default function UserManagement() {
       } else {
         // Create user
         if (!formData.password || formData.password.trim() === "") {
-          setError("Password is required for new users");
+          setError(t("users.passwordRequired"));
           return;
         }
         
@@ -94,7 +96,7 @@ export default function UserManagement() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Delete this user? All their tasks and comments will be affected.")) return;
+    if (!confirm(t("users.deleteConfirm"))) return;
     
     try {
       await apiFetch(`/api/users/${id}`, { method: "DELETE" });
@@ -132,19 +134,19 @@ export default function UserManagement() {
     return (
       <Layout>
         <div className="flex h-screen items-center justify-center">
-          <p className="text-slate-500">Loading...</p>
+          <p className="text-slate-500">{t("common.loading")}</p>
         </div>
       </Layout>
     );
   }
 
   return (
-    <Layout title="User Management">
+    <Layout title={t("users.title")}>
       <div className="p-4 md:p-8">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 md:hidden">User Management</h2>
-            <p className="text-sm text-slate-500 md:hidden">Manage team members and roles</p>
+            <h2 className="text-2xl font-semibold text-slate-900 md:hidden">{t("users.title")}</h2>
+            <p className="text-sm text-slate-500 md:hidden">{t("users.manageTeam")}</p>
           </div>
           <button
             onClick={() => {
@@ -153,7 +155,7 @@ export default function UserManagement() {
             }}
             className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
           >
-            + Add User
+            + {t("users.addUser")}
           </button>
         </div>
 
@@ -161,7 +163,7 @@ export default function UserManagement() {
         {showForm && (
           <div className="mb-6 rounded-xl bg-white p-6 shadow-soft">
             <h3 className="mb-4 text-lg font-semibold text-slate-900">
-              {editingId ? "Edit User" : "Create User"}
+              {editingId ? t("users.editUser") : t("users.createUser")}
             </h3>
             
             {error && (
@@ -173,7 +175,7 @@ export default function UserManagement() {
             <form onSubmit={handleSave} className="flex flex-col gap-4">
               <input
                 type="text"
-                placeholder="Full Name"
+                placeholder={t("users.fullName")}
                 className="rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -181,7 +183,7 @@ export default function UserManagement() {
               />
               <input
                 type="email"
-                placeholder="Email"
+                placeholder={t("users.email")}
                 className="rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -189,7 +191,7 @@ export default function UserManagement() {
               />
               <input
                 type="password"
-                placeholder={editingId ? "Password (leave blank to keep current)" : "Password"}
+                placeholder={editingId ? t("users.passwordPlaceholder") : t("users.password")}
                 className="rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -200,9 +202,9 @@ export default function UserManagement() {
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
               >
-                <option value="Member">Member</option>
-                <option value="PM">Project Manager</option>
-                <option value="Admin">Admin</option>
+                <option value="Member">{t("users.roles.member")}</option>
+                <option value="PM">{t("users.roles.pm")}</option>
+                <option value="Admin">{t("users.roles.admin")}</option>
               </select>
               
               <div className="flex gap-2">
@@ -210,14 +212,14 @@ export default function UserManagement() {
                   type="submit"
                   className="flex-1 rounded-lg bg-slate-900 py-3 text-sm font-medium text-white transition hover:bg-slate-700"
                 >
-                  {editingId ? "Update User" : "Create User"}
+                  {editingId ? t("users.updateUser") : t("users.createUser")}
                 </button>
                 <button
                   type="button"
                   onClick={resetForm}
                   className="flex-1 rounded-lg border border-slate-200 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                 >
-                  Cancel
+                  {t("common.cancel")}
                 </button>
               </div>
             </form>
@@ -231,19 +233,19 @@ export default function UserManagement() {
               <thead className="border-b border-slate-100 bg-slate-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase text-slate-600">
-                    Name
+                    {t("users.name")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase text-slate-600">
-                    Email
+                    {t("users.email")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase text-slate-600">
-                    Role
+                    {t("users.role")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase text-slate-600">
-                    Joined
+                    {t("users.joined")}
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium uppercase text-slate-600">
-                    Actions
+                    {t("users.actions")}
                   </th>
                 </tr>
               </thead>
@@ -255,7 +257,7 @@ export default function UserManagement() {
                         <p className="font-medium text-slate-900">{user.name}</p>
                         {user.id === currentUser.id && (
                           <span className="rounded bg-green-100 px-2 py-0.5 text-xs text-green-700">
-                            You
+                            {t("users.you")}
                           </span>
                         )}
                       </div>
@@ -277,14 +279,14 @@ export default function UserManagement() {
                           onClick={() => handleEdit(user)}
                           className="rounded-lg bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 transition hover:bg-slate-200"
                         >
-                          Edit
+                          {t("common.edit")}
                         </button>
                         {user.id !== currentUser.id && (
                           <button
                             onClick={() => handleDelete(user.id)}
                             className="rounded-lg bg-red-100 px-3 py-1 text-xs font-medium text-red-700 transition hover:bg-red-200"
                           >
-                            Delete
+                            {t("common.delete")}
                           </button>
                         )}
                       </div>
@@ -298,7 +300,7 @@ export default function UserManagement() {
 
         {users.length === 0 && (
           <div className="mt-6 rounded-xl bg-white p-12 text-center shadow-soft">
-            <p className="text-slate-500">No users found</p>
+            <p className="text-slate-500">{t("users.noUsers")}</p>
           </div>
         )}
       </div>

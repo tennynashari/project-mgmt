@@ -1,0 +1,78 @@
+{
+  "common": {
+    "welcome": "Welcome back",
+    "logout": "Logout",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export Excel",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of"
+  },
+  "sidebar": {
+    "appName": "PM App",
+    "appDescription": "Project Management",
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "tasks": "Tasks",
+    "activities": "Activity Log",
+    "userManagement": "User Management"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalProjects": "Total Projects",
+    "activeTasks": "Active Tasks",
+    "teamMembers": "Team Members",
+    "completedTasks": "Completed Tasks",
+    "overview": "Overview",
+    "statistics": "Statistics",
+    "activeProjects": "Active Projects",
+    "tasksToday": "Tasks Today",
+    "overdueTasks": "Overdue Tasks",
+    "taskStatusDistribution": "Task Status Distribution",
+    "projectProgress": "Project Progress",
+    "totalTasks": "Total Tasks",
+    "tasks": "tasks",
+    "status": {
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "review": "Review",
+      "done": "Done"
+    }
+  },
+  "users": {
+    "title": "User Management",
+    "allUsers": "All Users",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "createdAt": "Created At",
+    "joined": "Joined",
+    "actions": "Actions",
+    "noUsers": "No users found",
+    "addUser": "Add User",
+    "editUser": "Edit User",
+    "createUser": "Create User",
+    "updateUser": "Update User",
+    "fullName": "Full Name",
+    "password": "Password",
+    "passwordPlaceholder": "Password (leave blank to keep current)",
+    "passwordRequired": "Password is required for new users",
+    "deleteConfirm": "Delete this user? All their tasks and comments will be affected.",
+    "you": "You",
+    "manageTeam": "Manage team members and roles",
+    "roles": {
+      "admin": "Admin",
+      "pm": "Project Manager",
+      "member": "Member"
+    }
+  }
+}

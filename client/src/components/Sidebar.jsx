@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { apiFetch } from "../api.js";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 const navItem = ({ isActive }) =>
   `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${
@@ -9,6 +10,7 @@ const navItem = ({ isActive }) =>
 
 export default function Sidebar({ isOpen, onClose }) {
   const [currentUser, setCurrentUser] = useState(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     apiFetch("/api/users/me/profile")
@@ -33,8 +35,8 @@ export default function Sidebar({ isOpen, onClose }) {
         isOpen ? 'flex translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}>
       <div className="mb-8">
-        <h1 className="text-lg font-semibold text-slate-900">PM App</h1>
-        <p className="text-xs text-slate-500">Project Management</p>
+        <h1 className="text-lg font-semibold text-slate-900">{t("sidebar.appName")}</h1>
+        <p className="text-xs text-slate-500">{t("sidebar.appDescription")}</p>
         {currentUser && (
           <div className="mt-2 rounded-lg bg-slate-50 p-2">
             <p className="text-xs font-medium text-slate-700">{currentUser.name}</p>
@@ -44,20 +46,20 @@ export default function Sidebar({ isOpen, onClose }) {
       </div>
       <nav className="flex flex-col gap-2">
         <NavLink to="/" className={navItem} onClick={onClose}>
-          Dashboard
+          {t("sidebar.dashboard")}
         </NavLink>
         <NavLink to="/projects" className={navItem} onClick={onClose}>
-          Projects
+          {t("sidebar.projects")}
         </NavLink>
         <NavLink to="/tasks" className={navItem} onClick={onClose}>
-          Tasks
+          {t("sidebar.tasks")}
         </NavLink>
         <NavLink to="/activities" className={navItem} onClick={onClose}>
-          Activity Log
+          {t("sidebar.activities")}
         </NavLink>
         {isPMorAdmin && (
           <NavLink to="/users" className={navItem} onClick={onClose}>
-            👥 User Management
+            👥 {t("sidebar.userManagement")}
           </NavLink>
         )}
       </nav>

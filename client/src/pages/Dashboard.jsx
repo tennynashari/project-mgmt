@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout.jsx";
 import { apiFetch } from "../api.js";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 export default function Dashboard() {
+  const { t } = useLanguage();
   const [stats, setStats] = useState({ 
     activeProjects: 0, 
     todayTasks: 0, 
@@ -22,30 +24,30 @@ export default function Dashboard() {
                      statusDistribution.review + statusDistribution.done;
 
   return (
-    <Layout title="Dashboard">
+    <Layout title={t("dashboard.title")}>
       <div className="p-4 md:p-8">
         {/* Mobile Title */}
-        <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:hidden">Dashboard</h2>
+        <h2 className="mb-6 text-2xl font-semibold text-slate-900 md:hidden">{t("dashboard.title")}</h2>
         
         {/* Main Stats */}
         <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-xl bg-white p-6 shadow-soft">
-            <p className="text-sm text-slate-500">Active Projects</p>
+            <p className="text-sm text-slate-500">{t("dashboard.activeProjects")}</p>
             <p className="text-3xl font-bold text-slate-900">{stats.activeProjects}</p>
           </div>
           <div className="rounded-xl bg-white p-6 shadow-soft">
-            <p className="text-sm text-slate-500">Tasks Today</p>
+            <p className="text-sm text-slate-500">{t("dashboard.tasksToday")}</p>
             <p className="text-3xl font-bold text-slate-900">{stats.todayTasks}</p>
           </div>
           <div className="rounded-xl bg-white p-6 shadow-soft">
-            <p className="text-sm text-slate-500">Overdue Tasks</p>
+            <p className="text-sm text-slate-500">{t("dashboard.overdueTasks")}</p>
             <p className="text-3xl font-bold text-red-600">{stats.overdueTasks}</p>
           </div>
         </div>
 
         {/* Status Distribution */}
         <div className="rounded-xl bg-white p-6 shadow-soft">
-          <h3 className="mb-4 text-lg font-semibold text-slate-900">Task Status Distribution</h3>
+          <h3 className="mb-4 text-lg font-semibold text-slate-900">{t("dashboard.taskStatusDistribution")}</h3>
           
           {/* Visual Bar */}
           {totalTasks > 0 && (
@@ -90,28 +92,28 @@ export default function Dashboard() {
             <div className="flex items-center gap-3">
               <div className="h-4 w-4 rounded bg-slate-400"></div>
               <div>
-                <p className="text-xs text-slate-500">To Do</p>
+                <p className="text-xs text-slate-500">{t("dashboard.status.todo")}</p>
                 <p className="text-lg font-bold text-slate-900">{statusDistribution.todo}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="h-4 w-4 rounded bg-blue-500"></div>
               <div>
-                <p className="text-xs text-slate-500">In Progress</p>
+                <p className="text-xs text-slate-500">{t("dashboard.status.inProgress")}</p>
                 <p className="text-lg font-bold text-slate-900">{statusDistribution.inProgress}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="h-4 w-4 rounded bg-yellow-500"></div>
               <div>
-                <p className="text-xs text-slate-500">Review</p>
+                <p className="text-xs text-slate-500">{t("dashboard.status.review")}</p>
                 <p className="text-lg font-bold text-slate-900">{statusDistribution.review}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="h-4 w-4 rounded bg-green-500"></div>
               <div>
-                <p className="text-xs text-slate-500">Done</p>
+                <p className="text-xs text-slate-500">{t("dashboard.status.done")}</p>
                 <p className="text-lg font-bold text-slate-900">{statusDistribution.done}</p>
               </div>
             </div>
@@ -119,7 +121,7 @@ export default function Dashboard() {
 
           {totalTasks > 0 && (
             <div className="mt-4 border-t border-slate-100 pt-4 text-sm text-slate-600">
-              Total Tasks: <span className="font-semibold text-slate-900">{totalTasks}</span>
+              {t("dashboard.totalTasks")}: <span className="font-semibold text-slate-900">{totalTasks}</span>
             </div>
           )}
         </div>
@@ -127,14 +129,14 @@ export default function Dashboard() {
         {/* Project Progress Chart */}
         {projectProgress && projectProgress.length > 0 && (
           <div className="mt-8 rounded-xl bg-white p-6 shadow-soft">
-            <h3 className="mb-4 text-lg font-semibold text-slate-900">Project Progress</h3>
+            <h3 className="mb-4 text-lg font-semibold text-slate-900">{t("dashboard.projectProgress")}</h3>
             <div className="space-y-4">
               {projectProgress.map((project) => (
                 <div key={project.id}>
                   <div className="mb-2 flex items-center justify-between">
                     <div className="flex-1">
                       <p className="font-medium text-slate-900">{project.name}</p>
-                      <p className="text-xs text-slate-500">{project.taskCount} tasks</p>
+                      <p className="text-xs text-slate-500">{project.taskCount} {t("dashboard.tasks")}</p>
                     </div>
                     <span className="text-sm font-semibold text-slate-700">{project.progress}%</span>
                   </div>

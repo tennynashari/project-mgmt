@@ -1,0 +1,78 @@
+{
+  "common": {
+    "welcome": "Selamat datang kembali",
+    "logout": "Keluar",
+    "loading": "Memuat...",
+    "noData": "Tidak ada data",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "edit": "Ubah",
+    "delete": "Hapus",
+    "create": "Buat",
+    "search": "Cari",
+    "filter": "Filter",
+    "export": "Ekspor Excel",
+    "previous": "Sebelumnya",
+    "next": "Selanjutnya",
+    "page": "Halaman",
+    "of": "dari"
+  },
+  "sidebar": {
+    "appName": "Aplikasi PM",
+    "appDescription": "Manajemen Proyek",
+    "dashboard": "Dasbor",
+    "projects": "Proyek",
+    "tasks": "Tugas",
+    "activities": "Log Aktivitas",
+    "userManagement": "Manajemen Pengguna"
+  },
+  "dashboard": {
+    "title": "Dasbor",
+    "totalProjects": "Total Proyek",
+    "activeTasks": "Tugas Aktif",
+    "teamMembers": "Anggota Tim",
+    "completedTasks": "Tugas Selesai",
+    "overview": "Ringkasan",
+    "statistics": "Statistik",
+    "activeProjects": "Proyek Aktif",
+    "tasksToday": "Tugas Hari Ini",
+    "overdueTasks": "Tugas Terlambat",
+    "taskStatusDistribution": "Distribusi Status Tugas",
+    "projectProgress": "Progres Proyek",
+    "totalTasks": "Total Tugas",
+    "tasks": "tugas",
+    "status": {
+      "todo": "Belum Mulai",
+      "inProgress": "Sedang Berjalan",
+      "review": "Ditinjau",
+      "done": "Selesai"
+    }
+  },
+  "users": {
+    "title": "Manajemen Pengguna",
+    "allUsers": "Semua Pengguna",
+    "name": "Nama",
+    "email": "Email",
+    "role": "Peran",
+    "createdAt": "Dibuat Pada",
+    "joined": "Bergabung",
+    "actions": "Aksi",
+    "noUsers": "Tidak ada pengguna",
+    "addUser": "Tambah Pengguna",
+    "editUser": "Ubah Pengguna",
+    "createUser": "Buat Pengguna",
+    "updateUser": "Perbarui Pengguna",
+    "fullName": "Nama Lengkap",
+    "password": "Kata Sandi",
+    "passwordPlaceholder": "Kata Sandi (kosongkan untuk tetap sama)",
+    "passwordRequired": "Kata sandi wajib diisi untuk pengguna baru",
+    "deleteConfirm": "Hapus pengguna ini? Semua tugas dan komentar mereka akan terpengaruh.",
+    "you": "Anda",
+    "manageTeam": "Kelola anggota tim dan peran",
+    "roles": {
+      "admin": "Admin",
+      "pm": "Manajer Proyek",
+      "member": "Anggota"
+    }
+  }
+}
