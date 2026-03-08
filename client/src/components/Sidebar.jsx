@@ -31,16 +31,16 @@ export default function Sidebar({ isOpen, onClose }) {
       )}
       
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 h-screen w-64 flex-col border-r border-slate-100 bg-white p-6 transition-transform md:static md:flex ${
+      <aside className={`fixed inset-y-0 left-0 z-50 flex h-screen w-64 flex-col border-r border-slate-100 bg-white p-6 transition-transform md:static md:flex ${
         isOpen ? 'flex translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}>
       <div className="mb-8">
         <h1 className="text-lg font-semibold text-slate-900">{t("sidebar.appName")}</h1>
         <p className="text-xs text-slate-500">{t("sidebar.appDescription")}</p>
         {currentUser && (
-          <div className="mt-2 rounded-lg bg-slate-50 p-2">
-            <p className="text-xs font-medium text-slate-700">{currentUser.name}</p>
-            <p className="text-xs text-slate-500">{currentUser.role}</p>
+          <div className="mt-3 rounded-lg bg-slate-50 p-3">
+            <p className="truncate text-sm font-medium text-slate-700">{currentUser.name}</p>
+            <p className="mt-0.5 text-xs text-slate-500">{currentUser.role}</p>
           </div>
         )}
       </div>

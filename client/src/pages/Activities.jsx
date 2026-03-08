@@ -66,16 +66,16 @@ export default function Activities() {
         ) : (
           <div className="space-y-4">
             {activities.map((activity) => (
-              <div key={activity.id} className="rounded-xl bg-white p-4 shadow-soft">
-                <div className="flex items-start gap-4">
-                  <div className="text-2xl">{getActivityIcon(activity.type)}</div>
-                  <div className="flex-1">
+              <div key={activity.id} className="rounded-xl bg-white p-4 shadow-soft sm:p-6">
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="flex-shrink-0 text-xl sm:text-2xl">{getActivityIcon(activity.type)}</div>
+                  <div className="min-w-0 flex-1">
                     <p className="font-medium text-slate-900">{activity.message}</p>
                     <p className="mt-1 text-sm text-slate-600">{activity.detail}</p>
-                    <div className="mt-2 flex items-center gap-4 text-xs text-slate-500">
-                      <span>👤 {activity.user}</span>
-                      <span>📁 {activity.project}</span>
-                      <span>🕒 {getRelativeTime(activity.timestamp)}</span>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
+                      <span className="truncate">👤 {activity.user}</span>
+                      <span className="truncate">📁 {activity.project}</span>
+                      <span className="flex-shrink-0">🕒 {getRelativeTime(activity.timestamp)}</span>
                     </div>
                   </div>
                 </div>

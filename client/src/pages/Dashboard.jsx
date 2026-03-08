@@ -88,33 +88,33 @@ export default function Dashboard() {
           )}
 
           {/* Legend */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <div className="flex items-center gap-3">
-              <div className="h-4 w-4 rounded bg-slate-400"></div>
-              <div>
-                <p className="text-xs text-slate-500">{t("dashboard.status.todo")}</p>
-                <p className="text-lg font-bold text-slate-900">{statusDistribution.todo}</p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-4 flex-shrink-0 rounded bg-slate-400"></div>
+              <div className="min-w-0">
+                <p className="truncate text-xs text-slate-500">{t("dashboard.status.todo")}</p>
+                <p className="text-base font-bold text-slate-900 sm:text-lg">{statusDistribution.todo}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="h-4 w-4 rounded bg-blue-500"></div>
-              <div>
-                <p className="text-xs text-slate-500">{t("dashboard.status.inProgress")}</p>
-                <p className="text-lg font-bold text-slate-900">{statusDistribution.inProgress}</p>
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-4 flex-shrink-0 rounded bg-blue-500"></div>
+              <div className="min-w-0">
+                <p className="truncate text-xs text-slate-500">{t("dashboard.status.inProgress")}</p>
+                <p className="text-base font-bold text-slate-900 sm:text-lg">{statusDistribution.inProgress}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="h-4 w-4 rounded bg-yellow-500"></div>
-              <div>
-                <p className="text-xs text-slate-500">{t("dashboard.status.review")}</p>
-                <p className="text-lg font-bold text-slate-900">{statusDistribution.review}</p>
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-4 flex-shrink-0 rounded bg-yellow-500"></div>
+              <div className="min-w-0">
+                <p className="truncate text-xs text-slate-500">{t("dashboard.status.review")}</p>
+                <p className="text-base font-bold text-slate-900 sm:text-lg">{statusDistribution.review}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="h-4 w-4 rounded bg-green-500"></div>
-              <div>
-                <p className="text-xs text-slate-500">{t("dashboard.status.done")}</p>
-                <p className="text-lg font-bold text-slate-900">{statusDistribution.done}</p>
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-4 flex-shrink-0 rounded bg-green-500"></div>
+              <div className="min-w-0">
+                <p className="truncate text-xs text-slate-500">{t("dashboard.status.done")}</p>
+                <p className="text-base font-bold text-slate-900 sm:text-lg">{statusDistribution.done}</p>
               </div>
             </div>
           </div>
@@ -133,12 +133,12 @@ export default function Dashboard() {
             <div className="space-y-4">
               {projectProgress.map((project) => (
                 <div key={project.id}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <div className="flex-1">
-                      <p className="font-medium text-slate-900">{project.name}</p>
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-medium text-slate-900">{project.name}</p>
                       <p className="text-xs text-slate-500">{project.taskCount} {t("dashboard.tasks")}</p>
                     </div>
-                    <span className="text-sm font-semibold text-slate-700">{project.progress}%</span>
+                    <span className="flex-shrink-0 text-sm font-semibold text-slate-700">{project.progress}%</span>
                   </div>
                   <div className="h-3 w-full overflow-hidden rounded-full bg-slate-100">
                     <div

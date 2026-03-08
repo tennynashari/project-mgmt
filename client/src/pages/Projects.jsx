@@ -151,15 +151,16 @@ export default function Projects() {
       <div className="p-4 md:p-8">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-semibold text-slate-900 md:hidden">{t("projects.title")}</h2>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={handleExportExcel}
-              className="flex items-center gap-2 rounded-lg border border-green-600 bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-green-600 bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-700 sm:flex-initial sm:px-4"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              {t("common.export")}
+              <span className="hidden xs:inline">{t("common.export")}</span>
+              <span className="xs:hidden">Excel</span>
             </button>
             <button
               onClick={() => {
@@ -173,9 +174,10 @@ export default function Projects() {
                   endDate: ""
                 });
               }}
-              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+              className="flex-1 rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-700 sm:flex-initial sm:px-4"
             >
-              + {t("projects.newProject")}
+              <span className="hidden xs:inline">+ {t("projects.newProject")}</span>
+              <span className="xs:hidden">+ {t("common.create")}</span>
             </button>
           </div>
         </div>
@@ -211,7 +213,7 @@ export default function Projects() {
                 <option value="Completed">{t("projects.statuses.completed")}</option>
                 <option value="Archived">{t("projects.statuses.archived")}</option>
               </select>
-              <div className="flex gap-4">
+              <div className="flex flex-col gap-4 sm:flex-row">
                 <input
                   type="date"
                   placeholder={t("projects.startDate")}
@@ -251,14 +253,14 @@ export default function Projects() {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
-            <div key={p.id} className="rounded-xl bg-white p-6 shadow-soft">
-              <div className="mb-2 flex items-start justify-between">
-                <h3 className="text-lg font-semibold text-slate-900">{p.name}</h3>
-                <span className="rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
+            <div key={p.id} className="flex flex-col rounded-xl bg-white p-4 shadow-soft sm:p-6">
+              <div className="mb-2 flex items-start justify-between gap-2">
+                <h3 className="min-w-0 flex-1 truncate text-base font-semibold text-slate-900 sm:text-lg">{p.name}</h3>
+                <span className="flex-shrink-0 rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
                   {p.status}
                 </span>
               </div>
-              {p.description && <p className="mb-4 text-sm text-slate-600">{p.description}</p>}
+              {p.description && <p className="mb-4 line-clamp-2 text-sm text-slate-600">{p.description}</p>}
               
               {/* Progress Summary */}
               {p.stats && p.stats.totalTasks > 0 && (
@@ -275,22 +277,22 @@ export default function Projects() {
                   </div>
                   
                   {/* Status Distribution */}
-                  <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-600">{t("dashboard.status.todo")}:</span>
-                      <span className="font-medium text-slate-700">{p.stats.todoTasks}</span>
+                      <span className="truncate text-slate-600">{t("dashboard.status.todo")}:</span>
+                      <span className="ml-1 font-medium text-slate-700">{p.stats.todoTasks}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-600">{t("dashboard.status.inProgress")}:</span>
-                      <span className="font-medium text-blue-700">{p.stats.inProgressTasks}</span>
+                      <span className="truncate text-slate-600">{t("dashboard.status.inProgress")}:</span>
+                      <span className="ml-1 font-medium text-blue-700">{p.stats.inProgressTasks}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-600">{t("dashboard.status.review")}:</span>
-                      <span className="font-medium text-yellow-700">{p.stats.reviewTasks}</span>
+                      <span className="truncate text-slate-600">{t("dashboard.status.review")}:</span>
+                      <span className="ml-1 font-medium text-yellow-700">{p.stats.reviewTasks}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-600">{t("dashboard.status.done")}:</span>
-                      <span className="font-medium text-green-700">{p.stats.completedTasks}</span>
+                      <span className="truncate text-slate-600">{t("dashboard.status.done")}:</span>
+                      <span className="ml-1 font-medium text-green-700">{p.stats.completedTasks}</span>
                     </div>
                   </div>
                   <div className="mt-2 border-t border-slate-200 pt-2 text-xs font-medium text-slate-700">
@@ -300,10 +302,10 @@ export default function Projects() {
               )}
               
               <div className="mb-4 text-xs text-slate-500">
-                {p.startDate && <div>{t("projects.start")}: {new Date(p.startDate).toLocaleDateString()}</div>}
-                {p.endDate && <div>{t("projects.end")}: {new Date(p.endDate).toLocaleDateString()}</div>}
+                {p.startDate && <div className="truncate">{t("projects.start")}: {new Date(p.startDate).toLocaleDateString()}</div>}
+                {p.endDate && <div className="truncate">{t("projects.end")}: {new Date(p.endDate).toLocaleDateString()}</div>}
               </div>
-              <div className="flex gap-2">
+              <div className="mt-auto flex flex-col gap-2 sm:flex-row">
                 <button
                   onClick={() => handleEdit(p)}
                   className="flex-1 rounded-lg bg-slate-100 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-200"

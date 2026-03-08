@@ -143,7 +143,7 @@ export default function UserManagement() {
   return (
     <Layout title={t("users.title")}>
       <div className="p-4 md:p-8">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 md:hidden">{t("users.title")}</h2>
             <p className="text-sm text-slate-500 md:hidden">{t("users.manageTeam")}</p>
@@ -161,8 +161,8 @@ export default function UserManagement() {
 
         {/* User Form */}
         {showForm && (
-          <div className="mb-6 rounded-xl bg-white p-6 shadow-soft">
-            <h3 className="mb-4 text-lg font-semibold text-slate-900">
+          <div className="mb-6 rounded-xl bg-white p-4 shadow-soft sm:p-6">
+            <h3 className="mb-4 text-base font-semibold text-slate-900 sm:text-lg">
               {editingId ? t("users.editUser") : t("users.createUser")}
             </h3>
             
@@ -226,8 +226,8 @@ export default function UserManagement() {
           </div>
         )}
 
-        {/* Users Table */}
-        <div className="rounded-xl bg-white shadow-soft">
+        {/* Users Table - Desktop */}
+        <div className="hidden rounded-xl bg-white shadow-soft md:block">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="border-b border-slate-100 bg-slate-50">
@@ -296,6 +296,49 @@ export default function UserManagement() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Users Cards - Mobile */}
+        <div className="space-y-4 md:hidden">
+          {users.map((user) => (
+            <div key={user.id} className="rounded-xl bg-white p-4 shadow-soft">
+              <div className="mb-3 flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex items-center gap-2">
+                    <p className="truncate font-medium text-slate-900">{user.name}</p>
+                    {user.id === currentUser.id && (
+                      <span className="flex-shrink-0 rounded bg-green-100 px-2 py-0.5 text-xs text-green-700">
+                        {t("users.you")}
+                      </span>
+                    )}
+                  </div>
+                  <p className="truncate text-sm text-slate-600">{user.email}</p>
+                </div>
+                <span className={`flex-shrink-0 rounded-md px-2 py-1 text-xs font-medium ${getRoleBadge(user.role)}`}>
+                  {user.role}
+                </span>
+              </div>
+              <div className="mb-3 text-xs text-slate-500">
+                {t("users.joined")}: {new Date(user.createdAt).toLocaleDateString()}
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEdit(user)}
+                  className="flex-1 rounded-lg bg-slate-100 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-200"
+                >
+                  {t("common.edit")}
+                </button>
+                {user.id !== currentUser.id && (
+                  <button
+                    onClick={() => handleDelete(user.id)}
+                    className="flex-1 rounded-lg bg-red-100 py-2 text-xs font-medium text-red-700 transition hover:bg-red-200"
+                  >
+                    {t("common.delete")}
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
 
         {users.length === 0 && (

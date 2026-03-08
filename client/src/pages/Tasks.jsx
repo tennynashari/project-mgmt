@@ -246,15 +246,16 @@ export default function Tasks() {
       <div className="p-4 md:p-8">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-semibold text-slate-900 md:hidden">{t("tasks.title")}</h2>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={handleExportExcel}
-              className="flex items-center gap-2 rounded-lg border border-green-600 bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-green-600 bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-700 sm:flex-initial sm:px-4"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              {t("common.export")}
+              <span className="hidden xs:inline">{t("common.export")}</span>
+              <span className="xs:hidden">Excel</span>
             </button>
             {(!currentUser || currentUser.role === "PM" || currentUser.role === "Admin") && (
               <button
@@ -262,9 +263,10 @@ export default function Tasks() {
                   resetForm();
                   setShowForm(true);
                 }}
-                className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+                className="flex-1 rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-700 sm:flex-initial sm:px-4"
               >
-                {t("tasks.newTask")}
+                <span className="hidden xs:inline">{t("tasks.newTask")}</span>
+                <span className="xs:hidden">+ {t("common.create")}</span>
               </button>
             )}
           </div>
@@ -273,7 +275,7 @@ export default function Tasks() {
         {/* Filters */}
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:gap-4">
           <select
-            className="rounded-lg border border-slate-200 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-slate-200 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
@@ -284,7 +286,7 @@ export default function Tasks() {
             <option value="Done">{t("tasks.statuses.done")}</option>
           </select>
           <select
-            className="rounded-lg border border-slate-200 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-slate-200 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
             value={filterProject}
             onChange={(e) => setFilterProject(e.target.value)}
           >
@@ -299,8 +301,8 @@ export default function Tasks() {
 
         {/* Task Form */}
         {showForm && (
-          <div className="mb-6 rounded-xl bg-white p-6 shadow-soft">
-            <h3 className="mb-4 text-lg font-semibold text-slate-900">
+          <div className="mb-6 rounded-xl bg-white p-4 shadow-soft sm:p-6">
+            <h3 className="mb-4 text-base font-semibold text-slate-900 sm:text-lg">
               {editingId ? t("tasks.editTask") : t("tasks.createTask")}
             </h3>
             <form onSubmit={handleSave} className="flex flex-col gap-4">
@@ -332,7 +334,7 @@ export default function Tasks() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <select
                   className="rounded-lg border border-slate-200 p-3 text-sm focus:border-blue-500 focus:outline-none"
                   value={formData.status}
@@ -365,7 +367,7 @@ export default function Tasks() {
                   </option>
                 ))}
               </select>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-xs text-slate-600">{t("tasks.startDate")}</label>
                   <input
@@ -419,32 +421,32 @@ export default function Tasks() {
         {/* Tasks List */}
         <div className="grid grid-cols-1 gap-4">
           {filteredTasks.map((task) => (
-            <div key={task.id} className="rounded-xl bg-white p-6 shadow-soft">
-              <div className="mb-3 flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="mb-2 flex items-center gap-2">
+            <div key={task.id} className="flex flex-col rounded-xl bg-white p-4 shadow-soft sm:p-6">
+              <div className="mb-3 flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
                     <h3 
-                      className="cursor-pointer text-lg font-semibold text-slate-900 hover:text-blue-600 transition"
+                      className="cursor-pointer truncate text-base font-semibold text-slate-900 transition hover:text-blue-600 sm:text-lg"
                       onClick={() => navigate(`/tasks/${task.id}`)}
                     >
                       {task.title}
                     </h3>
-                    <span className={`rounded-md px-2 py-1 text-xs font-medium ${getStatusColor(task.status)}`}>
+                    <span className={`flex-shrink-0 rounded-md px-2 py-1 text-xs font-medium ${getStatusColor(task.status)}`}>
                       {task.status}
                     </span>
-                    <span className={`rounded-md px-2 py-1 text-xs font-medium ${getPriorityColor(task.priority)}`}>
+                    <span className={`flex-shrink-0 rounded-md px-2 py-1 text-xs font-medium ${getPriorityColor(task.priority)}`}>
                       {task.priority}
                     </span>
                   </div>
-                  {task.description && <p className="mb-3 text-sm text-slate-600">{task.description}</p>}
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500">
-                    <div>📁 {task.project.name}</div>
-                    {task.assignee && <div>👤 {task.assignee.name}</div>}
+                  {task.description && <p className="mb-3 line-clamp-2 text-sm text-slate-600">{task.description}</p>}
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500">
+                    <div className="truncate">📁 {task.project.name}</div>
+                    {task.assignee && <div className="truncate">👤 {task.assignee.name}</div>}
                     {task.startDate && (
-                      <div>🗓️ {t("tasks.start")}: {new Date(task.startDate).toLocaleDateString()}</div>
+                      <div className="truncate">🗓️ {t("tasks.start")}: {new Date(task.startDate).toLocaleDateString()}</div>
                     )}
                     {task.dueDate && (
-                      <div>📅 {t("tasks.due")}: {new Date(task.dueDate).toLocaleDateString()}</div>
+                      <div className="truncate">📅 {t("tasks.due")}: {new Date(task.dueDate).toLocaleDateString()}</div>
                     )}
                   </div>
                   {/* Progress Bar */}
@@ -463,7 +465,7 @@ export default function Tasks() {
                 </div>
               </div>
               {(!currentUser || currentUser.role === "PM" || currentUser.role === "Admin") && (
-                <div className="flex gap-2 border-t border-slate-100 pt-4">
+                <div className="mt-auto flex flex-col gap-2 border-t border-slate-100 pt-4 sm:flex-row">
                   <button
                     onClick={() => handleEdit(task)}
                     className="flex-1 rounded-lg bg-slate-100 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-200"
