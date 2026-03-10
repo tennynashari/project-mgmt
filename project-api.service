@@ -12,15 +12,15 @@ EnvironmentFile=/var/www/project-mgmt/server/.env
 ExecStart=/usr/bin/node index.js
 Restart=on-failure
 RestartSec=10
-StandardOutput=append:/var/www/project-mgmt/server/logs/app.log
-StandardError=append:/var/www/project-mgmt/server/logs/error.log
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=project-api
 
 # Security
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/var/www/project-mgmt/server/logs
 
 [Install]
 WantedBy=multi-user.target
