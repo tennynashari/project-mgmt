@@ -15,6 +15,15 @@ async function main() {
   // Create users
   const hashedPassword = await bcrypt.hash("password123", 10);
 
+  const userAdmin = await prisma.user.create({
+    data: {
+      name: "Admin User",
+      email: "admin@example.com",
+      password: hashedPassword,
+      role: "Admin"
+    }
+  });
+
   const user1 = await prisma.user.create({
     data: {
       name: "John Doe",
@@ -42,7 +51,7 @@ async function main() {
     }
   });
 
-  console.log("✅ Created 3 users");
+  console.log("✅ Created 4 users (Admin, PM, Members)");
 
   // Create projects
   const project1 = await prisma.project.create({
@@ -298,9 +307,10 @@ async function main() {
 
   console.log("\n🎉 Seeding completed successfully!");
   console.log("\nTest credentials:");
-  console.log("Email: john@example.com | Password: password123 (PM)");
-  console.log("Email: jane@example.com | Password: password123 (Member)");
-  console.log("Email: bob@example.com | Password: password123 (Member)");
+  console.log("Email: admin@example.com | Password: password123 (Admin)");
+  console.log("Email: john@example.com  | Password: password123 (PM)");
+  console.log("Email: jane@example.com  | Password: password123 (Member)");
+  console.log("Email: bob@example.com   | Password: password123 (Member)");
 }
 
 main()
